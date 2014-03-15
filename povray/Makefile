@@ -1,5 +1,7 @@
 CFLAGS =
 
+GZIP = 1
+
 all:
 
 Room_N: Room_N.pov
