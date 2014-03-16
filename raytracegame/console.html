@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<head>
+<script src="scripts/jquery.js"></script>
+<script src="scripts/underscore.js"></script>
+<link rel="stylesheet" href="static/console.css">
+<title></title>
+</head>
+
+<body>
+<div id="output"></div>
+
+<div>
+  <input type="text" id="prompt" name="prompt" autofocus>
+  <br />
+  <input type="button" id="eval" value="Eval">
+  <input type="button" id="exec" value="Exec">
+</div>
+
+
+<script>
+function print(data) {
+ var response_type = data[0];
+ output = _.escape(data.substring(1));
+ $("#output").append("<div class='" + response_type + "'>" + output + "</div>");
+ $("#output").scrollTop($("#output")[0].scrollHeight);
+}
+
+function python_ajax(evaluator) {
+ $.get("/code", {"evaluator": evaluator,
+                 "input": $("#prompt").val()},
+       print);
+ $("#prompt").val("")
+}
+
+var shift_held = 0;
+ 
+function init() {
+ $("#prompt").keyup(function(e) {
+  if (e.keyCode == 13) {
+   if (shift_held) {
+    python_ajax ("exec");
+   } else {
+    python_ajax ("eval");
+   }
+  } else if (e.keyCode == 16) {
+   shift_held = 0;
+  }
+ });
+ $("#prompt").keydown(function(e) {
+  if (e.keyCode == 16) {
+   shift_held = 1;
+  }
+ });
+ $("#eval").click (function () { python_ajax ("eval"); });
+ $("#exec").click (function () { python_ajax ("exec"); });
+}
+$(document).ready (init);
+</script>
+
+</body> </html>
+{% endautoescape %}

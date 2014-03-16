@@ -11,6 +11,9 @@ handlers:
 - url: /static
   static_dir: static
 
+- url: /places
+  static_dir: places
+
 - url: /.*
   script: raytracegame.app
 
@@ -18,4 +21,6 @@ libraries:
 - name: webapp2
   version: latest
 - name: jinja2
+  version: latest
+- name: PIL
   version: latest

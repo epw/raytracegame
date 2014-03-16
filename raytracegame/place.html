@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<head>
+<script src="scripts/jquery.js"></script>
+<script src="scripts/underscore.js"></script>
+<title></title>
+<style>
+#mask { border: medium gray solid; }
+</style>
+</head>
+
+<body>
+<div>
+<img id="rendered" src="places/{{ place }}/rendered.png">
+</div>
+
+<script src="scripts/place.js"></script>
+
+<script>set_place("{{ place }}");</script>
+
+</body> </html>
+{% endautoescape %}
