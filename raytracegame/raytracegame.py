@@ -1,3 +1,5 @@
+from model import Link
+
 import png
 
 import json
@@ -18,15 +20,6 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
-Link = {
-    "Room_N_red": {
-        "1": "Room_N_blue",
-        },
-    "Room_N_blue": {
-        "1": "Room_N_red",
-        },
-    }
-
 def user_key(user):
     return ndb.Key(Player, user.user_id())
 
@@ -39,7 +32,7 @@ class Player(ndb.Model):
     def get_entity(cls, user):
         query = user_key(user).get()
         if not query:
-            query = Player(key=user_key(user), player=user, place="Room_N_red")
+            query = Player(key=user_key(user), player=user, place="Room_N")
             query.put()
 
         return query
@@ -96,13 +89,11 @@ class LookPage(webapp2.RequestHandler):
             rows = list(image[2])
             if rows[y][x * 3]:
                 player = Player.get_entity(user)
-                try:
+                if place in Link and str(i) in Link[place]:
                     player.place = Link[place][str(i)]
                     self.response.write(player)
-                except KeyError:
-                    pass
-                player.put()
-                return
+                    player.put()
+                    return
             i += 1
 
 class ConsolePage(webapp2.RequestHandler):

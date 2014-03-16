@@ -23,10 +23,19 @@ plane { z, 0
 	}
 }
 
+#ifdef (Red_Room)
+#declare Sphere_Color = color Red;
+#end
+#ifdef (Blue_Room)
+#declare Sphere_Color = color Blue;
+#end
+
 #declare Interesting_Sphere =
 sphere { <0, 5, 2>, 1
 	texture {
-		pigment { color Red }
+		pigment {
+			Sphere_Color
+		}
 	}
 };
 
