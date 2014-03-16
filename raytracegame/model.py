@@ -6,3 +6,5 @@ Link = {
         "1": "Room_N_red",
         },
     }
+
+Starting_Place = "Room_N_red"

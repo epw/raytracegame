@@ -1,3 +1,4 @@
+from model import Starting_Place
 from model import Link
 
 import png
@@ -32,7 +33,8 @@ class Player(ndb.Model):
     def get_entity(cls, user):
         query = user_key(user).get()
         if not query:
-            query = Player(key=user_key(user), player=user, place="Room_N")
+            query = Player(key=user_key(user), player=user,
+                           place=Starting_Place)
             query.put()
 
         return query
