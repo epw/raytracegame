@@ -2,7 +2,7 @@
 #include "woods.inc"
 #include "activeobjs.inc"
 
-#declare HEAD_HEIGHT = 2;
+#include "worldstandard.inc"
 
 camera {
 	location <0, 0, HEAD_HEIGHT>
@@ -23,11 +23,14 @@ plane { z, 0
 	}
 }
 
+#declare Sphere_Color = color Gray;
+
 #ifdef (Red_Room)
 #declare Sphere_Color = color Red;
-#end
+#else
 #ifdef (Blue_Room)
 #declare Sphere_Color = color Blue;
+#end
 #end
 
 #declare Interesting_Sphere =
