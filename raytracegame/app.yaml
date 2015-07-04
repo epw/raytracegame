@@ -1,26 +1,18 @@
 application: raytracegame
 version: 1
-runtime: python27
-api_version: 1
-threadsafe: true
+runtime: go
+api_version: go1
 
 handlers:
-- url: /scripts
-  static_dir: scripts
-
-- url: /static
-  static_dir: static
-
 - url: /places
   static_dir: places
-
+- url: /masks
+  static_dir: masks
+- url: /js
+  mime_type: text/javascript
+  static_dir: js
+- url: /static
+  static_dir: static
 - url: /.*
-  script: raytracegame.app
+  script: _go_app
 
-libraries:
-- name: webapp2
-  version: latest
-- name: jinja2
-  version: latest
-- name: PIL
-  version: latest
