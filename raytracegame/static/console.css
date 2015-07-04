@@ -1,8 +1,0 @@
-#output { color: white; background: black; padding: 3px; font-family: courier;
-          white-space: pre; width: 640px; height: 480px; overflow: auto }
-#prompt { width: 640px; }
-
-/* For reasons that are totally unclear to me, these don't work. */
-.r { color: #ffffff; }
-.p { color: #00dd00; }
-.e { color: #ff0000; }
