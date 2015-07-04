@@ -8,8 +8,19 @@
 }
 #end
 
-#macro Active_Object (OBJ)
+#macro Active_Object (NAME, OBJ)
 #declare ACTIVE_ID = ACTIVE_ID + 1;
+#ifndef (Active)
+
+#fopen ActiveCountFile "map.dat" append
+#write (ActiveCountFile, concat(" ", NAME, " \n"))
+#fclose ActiveCountFile
+
+#fopen ActiveCountFile "current.dat" append
+#write (ActiveCountFile, concat(" ", NAME, " \n"))
+#fclose ActiveCountFile
+
+#end
 object {
 	OBJ
 #ifdef (Active)
@@ -20,14 +31,4 @@ object {
 #end
 #end
 }
-#end
-
-#macro Record_Active_Count ()
-#ifndef (Active)
-
-#fopen ActiveCountFile "activecount.txt" write
-#write (ActiveCountFile, ACTIVE_ID)
-#fclose ActiveCountFile
-
-#end
 #end

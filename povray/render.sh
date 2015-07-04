@@ -18,14 +18,24 @@ for arg in $*
 do
     declarations="$declarations Declare=$arg"
 done
+
 root=../raytracegame
+
+cat /dev/null > current.dat
+echo $name >> map.dat
 $POVRAY $base.ini $declarations
-mkdir $root/places/$name
-mkdir $root/masks/$name
+if [[ ! -d $root/places/$name ]]; then
+    mkdir $root/places/$name
+fi
+if [[ ! -d $root/masks/$name ]]; then
+    mkdir $root/masks/$name
+fi
 cp $base.png $root/places/$name/rendered.png
-for i in $(seq `cat activecount.txt`)
+i=1
+for a in `cat current.dat`
 do
     $POVRAY $base.ini[Active] $declarations Declare=Active=$i \
-	-O${base}_active$i.png
-    cp ${base}_active$i.png $root/masks/$name/active$i.png
+	-O${base}_active$a.png
+    cp ${base}_active$a.png $root/masks/$name/active$a.png
+    i=`expr $i + 1`
 done

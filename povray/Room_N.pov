@@ -42,15 +42,11 @@ sphere { <0, 5, 2>, 1
 	}
 };
 
-Active_Object (Interesting_Sphere)
+Active_Object ("1", Interesting_Sphere)
 
-Active_Object (
+Active_Object ("2",
 box { <-1, 5, 0>, <-2, 6, 1>
 	texture {
 		pigment { color Green }
 	}
 })
-
-// AFTER ALL RENDERING DONE, EXTRA CODE HERE
-
-Record_Active_Count ()

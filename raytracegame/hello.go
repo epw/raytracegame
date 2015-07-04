@@ -40,8 +40,12 @@ const displayHTML = `
     <script src="js/jquery.min.js"></script>
   </head>
   <body>
-    <img id="rendered" src="places/{{.}}/rendered.png">
-    <input id="place" type="hidden" value="{{.}}">
+    <form id="act" method="POST" action="/">
+      <img id="rendered" src="places/{{.}}/rendered.png">
+      <input id="place" name="place" type="hidden" value="{{.}}">
+      <input id="x" name="x" type="hidden" value="">
+      <input id="y" name="y" type="hidden" value="">
+    </form>
     <script src="js/click.js"></script>
   </body>
 </html>
@@ -95,7 +99,11 @@ func newRoom(place string, x int, y int) string {
 				continue
 			}
 		} else {
-			if string(line[:len(activePrefix)]) == activePrefix {
+			if len(line) == 0 || line[0] != ' ' {
+				found = false
+				continue
+			}
+			if len(line) >= len(activePrefix) && string(line[:len(activePrefix)]) == activePrefix {
 				return string(line[len(activePrefix):])
 			}
 		}
@@ -121,7 +129,11 @@ func root(w http.ResponseWriter, r *http.Request) {
 	if place == "" {
 		place = "Room_N_red"
 	}
-	err = displayTemplate.Execute(w, newRoom(place, x, y))
+	room := newRoom(place, x, y)
+	if room == "" {
+		room = place
+	}
+	err = displayTemplate.Execute(w, room)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
