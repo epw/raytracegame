@@ -54,13 +54,15 @@ const displayHTML = `
 
 var displayTemplate = template.Must(template.New("sign").Parse(displayHTML))
 
-func maskAt(x int, y int) string {
-	maskFiles, err := ioutil.ReadDir("masks/Room_N_red")
+func maskAt(place string, x int, y int) string {
+	dir := "masks/" + place
+	log.Printf("%v", dir)
+	maskFiles, err := ioutil.ReadDir(dir)
 	if err != nil {
-		return "0"
+		return ""
 	}
 	for _, maskFile := range maskFiles {
-		f, err := os.Open("masks/Room_N_red/" + maskFile.Name())
+		f, err := os.Open(dir + "/" + maskFile.Name())
 		if err != nil {
 			continue
 		}
@@ -74,14 +76,14 @@ func maskAt(x int, y int) string {
 			return maskFile.Name()[len("active_"):len(maskFile.Name()) - len(".png")]
 		}
 	}
-	return "0"
+	return ""
 }
 
 func newRoom(place string, x int, y int) string {
 	if x == -1 {
 		return place
 	}
-	mask := maskAt(x, y)
+	mask := maskAt(place, x, y)
 	log.Printf("Mask: %v", mask)
 
 	file, err := os.Open("map.dat")
