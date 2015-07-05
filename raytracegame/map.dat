@@ -1,6 +1,6 @@
 Room_N_red
- 1 
- 2 Room_N_blue
+ sphere Room_N_red
+ box Room_N_blue
 Room_N_blue
- 1 Room_N_red
- 2
+ sphere Room_N_red
+ box 

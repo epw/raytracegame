@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"image/png"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strconv"
 	"os"
@@ -58,7 +59,7 @@ func maskAt(x int, y int) string {
 	if err != nil {
 		return "0"
 	}
-	for i, maskFile := range maskFiles {
+	for _, maskFile := range maskFiles {
 		f, err := os.Open("masks/Room_N_red/" + maskFile.Name())
 		if err != nil {
 			continue
@@ -70,7 +71,7 @@ func maskAt(x int, y int) string {
 		color := im.At(x, y)
 		r, _, _, _ := color.RGBA()
 		if r != 0 {
-			return strconv.Itoa(i + 1)
+			return maskFile.Name()[len("active_"):len(maskFile.Name()) - len(".png")]
 		}
 	}
 	return "0"
@@ -81,6 +82,7 @@ func newRoom(place string, x int, y int) string {
 		return place
 	}
 	mask := maskAt(x, y)
+	log.Printf("Mask: %v", mask)
 
 	file, err := os.Open("map.dat")
 	if err != nil {

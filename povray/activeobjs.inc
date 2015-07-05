@@ -8,16 +8,16 @@
 }
 #end
 
-#macro Active_Object (NAME, OBJ)
+#macro Active_Object_Linked (NAME, OBJ, LINK)
 #declare ACTIVE_ID = ACTIVE_ID + 1;
 #ifndef (Active)
 
 #fopen ActiveCountFile "map.dat" append
-#write (ActiveCountFile, concat(" ", NAME, " \n"))
+#write (ActiveCountFile, concat(" ", NAME, " ", LINK, "\n"))
 #fclose ActiveCountFile
 
 #fopen ActiveCountFile "current.dat" append
-#write (ActiveCountFile, concat(" ", NAME, " \n"))
+#write (ActiveCountFile, concat(NAME, "\n"))
 #fclose ActiveCountFile
 
 #end
@@ -31,4 +31,8 @@ object {
 #end
 #end
 }
+#end
+
+#macro Active_Object (NAME, OBJ)
+Active_Object_Linked (NAME, OBJ, "")
 #end

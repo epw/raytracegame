@@ -70,7 +70,3 @@ union {
 //	}
 //	texture { T_Wood19 }
 //}
-
-// AFTER ALL RENDERING DONE, EXTRA CODE HERE
-
-Record_Active_Count ()

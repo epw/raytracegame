@@ -42,9 +42,9 @@ sphere { <0, 5, 2>, 1
 	}
 };
 
-Active_Object ("1", Interesting_Sphere)
+Active_Object_Linked ("sphere", Interesting_Sphere, "Room_N_red")
 
-Active_Object ("2",
+Active_Object ("box",
 box { <-1, 5, 0>, <-2, 6, 1>
 	texture {
 		pigment { color Green }
