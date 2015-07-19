@@ -1,6 +1,6 @@
-Room_N_red
- sphere Room_N_red
- box Room_N_blue
-Room_N_blue
- sphere Room_N_red
+First_Room
  box 
+ corridor Corridor
+Corridor
+ box 
+ corridor First_Room

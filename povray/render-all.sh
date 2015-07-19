@@ -5,6 +5,10 @@
 
 cat /dev/null > map.dat
 
-render.sh Room_N Room_N_red Red_Room=1
-render.sh Room_N Room_N_blue Blue_Room=1
+root=../raytracegame
+rm -rf $root/places $root/masks
+mkdir $root/places $root/masks
+
+render.sh First_Room
+render.sh Corridor
 

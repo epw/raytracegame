@@ -16,6 +16,7 @@ import (
 )
 
 func init() {
+	http.HandleFunc("/click_event", click_event)
 	http.HandleFunc("/", root)
 }
 
@@ -36,19 +37,25 @@ func userLogin(w http.ResponseWriter, r *http.Request) *user.User {
 }
 
 const displayHTML = `
+<!DOCTYPE html>
 <html>
-  <head>
-    <script src="js/jquery.min.js"></script>
-  </head>
-  <body>
-    <form id="act" method="POST" action="/">
-      <img id="rendered" src="places/{{.}}/rendered.png">
-      <input id="place" name="place" type="hidden" value="{{.}}">
-      <input id="x" name="x" type="hidden" value="">
-      <input id="y" name="y" type="hidden" value="">
-    </form>
-    <script src="js/click.js"></script>
-  </body>
+<head>
+<script src="js/jquery.min.js"></script>
+<script src="js/three.min.js"></script>
+<style>
+  #placename { display: none }
+  #photosphere { display: none }
+  canvas.viewport { cursor: url(static/pointer.png), auto }
+  canvas.map { float: right; width: 30%; display: none }
+  #pointer { pointer-events: none; position: absolute; display: none }
+</style>
+</head>
+<body>
+  <span id="placename">{{.}}</span>
+  <img id="photosphere" src="places/{{.}}/rendered.png">
+  <img id="pointer" src="static/pointer.png">
+  <script src="js/script.js"></script>
+</body>
 </html>
 `
 
@@ -85,7 +92,10 @@ func newRoom(place string, x int, y int) string {
 	}
 	mask := maskAt(place, x, y)
 	log.Printf("Mask: %v", mask)
-
+	if mask == "" {
+		return ""
+	}
+	
 	file, err := os.Open("map.dat")
 	if err != nil {
 		return place
@@ -115,12 +125,13 @@ func newRoom(place string, x int, y int) string {
 	return place
 }
 
-func root(w http.ResponseWriter, r *http.Request) {
+
+func click_event(w http.ResponseWriter, r *http.Request) {
 	u := userLogin(w, r)
 	if u == nil {
 		return
 	}
-	
+
 	x, err := strconv.Atoi(r.FormValue("x"))
 	if err != nil {
 		x = -1
@@ -131,13 +142,27 @@ func root(w http.ResponseWriter, r *http.Request) {
 	}
 	place := r.FormValue("place")
 	if place == "" {
-		place = "Room_N_red"
+		place = "First_Room"
 	}
-	room := newRoom(place, x, y)
-	if room == "" {
-		room = place
+
+	log.Printf("Coords: (%v, %v)", x, y)
+	
+	new_room := newRoom(place, x, y)
+	if new_room != "" {
+		fmt.Fprintf(w, "{\"new_room\": \"places/%s/rendered.png\"}", new_room);
+	} else {
+		fmt.Fprintf(w, "{\"new_room\": false}")
 	}
-	err = displayTemplate.Execute(w, room)
+}
+
+
+func root(w http.ResponseWriter, r *http.Request) {
+	u := userLogin(w, r)
+	if u == nil {
+		return
+	}
+	
+	err := displayTemplate.Execute(w, "First_Room")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

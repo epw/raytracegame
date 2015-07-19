@@ -26,7 +26,7 @@ object {
 #ifdef (Active)
 #if (Active = ACTIVE_ID)
 	texture { pigment { color White }
-		  finish { ambient 1 }
+		  finish { ambient 1000 }
 	  }
 #end
 #end
