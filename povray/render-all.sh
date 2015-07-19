@@ -11,4 +11,5 @@ mkdir $root/places $root/masks
 
 render.sh First_Room
 render.sh Corridor
+render.sh Second_Room
 

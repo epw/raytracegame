@@ -67,9 +67,26 @@ function click_result(json) {
     }
 }
 
-function click_event() {
-    var x = (theta / (Math.PI * 2)) * img.width;
-    var y = img.height - ((phi + Math.PI / 2) / Math.PI) * img.height;
+function click_event(offset_x, offset_y) {
+/* If the cursor was locked, then the position is easy, it's just
+   calculated from theta and phi.
+
+   If the cursor was not locked (or this was a touch event), then it's
+   harder. We can calculate an offset to theta and phi with the field of view
+   and the image width.
+*/
+    if (!offset_x) {
+	offset_x = 0;
+    }
+    if (!offset_y) {
+	offset_y = 0;
+    }
+    offset_theta = (offset_x / WIDTH) * (Math.PI / 4);
+    offset_phi = (offset_y / HEIGHT) * (Math.PI / 4);
+
+    var x = ((theta + offset_theta) / (Math.PI * 2) * img.width) % img.width;
+    var y = (img.height - (((phi + offset_phi) + Math.PI / 2) / Math.PI)
+	     * img.height) % img.height;
     $.post("/click_event", {"x": Math.floor(x), "y": Math.floor(y),
 			    "place": placename},
 	   click_result);
@@ -80,6 +97,8 @@ function mouseclick(e) {
     case 0:
 	if (document.pointerLockElement == canvas) {
 	    click_event();
+	} else {
+	    click_event(e.pageX - WIDTH / 2, HEIGHT / 2 - e.pageY);
 	}
 	break;
     case 1:
@@ -106,6 +125,8 @@ function mouseup(e) {
 }
 
 function mouse_adjust_view(x, y) {
+    // This number is totally arbitrary, as far as I can tell. It feels like
+    // a good speed.
     theta += x / 300.0;
     phi -= y / 300.0;
 }
@@ -151,7 +172,7 @@ function touchmove(e) {
 function touchend(e) {
     e.preventDefault();
     if (just_tap) {
-	click_event();
+	click_event(e.pageX - WIDTH / 2, HEIGHT / 2 - e.pageY);
     }
 }
 
@@ -176,11 +197,6 @@ function animate() {
     look_at_point.y = Math.sin(phi);
     look_at_point.z = Math.sin(theta) * Math.cos(phi);
     camera.lookAt(look_at_point);
-//    pointer.position.x = look_at_point.x;
-//    pointer.position.y = look_at_point.y;
-//    pointer.position.z = look_at_point.z;
-//    pointer.rotation.y = -(theta + Math.PI / 2);
-
     renderer.render(scene, camera);
 }
 

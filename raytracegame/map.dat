@@ -4,3 +4,7 @@ First_Room
 Corridor
  box 
  corridor First_Room
+ second_room Second_Room
+Second_Room
+ second_room Corridor
+ 
