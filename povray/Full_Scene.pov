@@ -1,5 +1,6 @@
 #include "colors.inc"
 #include "stones.inc"
+#include "woods.inc"
 #include "activeobjs.inc"
 
 #include "worldstandard.inc"
@@ -34,8 +35,19 @@ difference {
 
 Active_Object ("box",
 box { <-.5, -4, 0> <.5, -5, 1>
+	texture { T_Wood4 }
+})
+
+#ifdef(Active)
+#declare Passway = color rgbt<0, 0, 0, 0>;
+#else
+#declare Passway = color rgbt<0, 0, 0, 1>;
+#end
+
+Active_Object ("corridor",
+plane { y, ROOM_SIZE / 2 + 0.1
 	texture {
-		pigment { color Red }
+		pigment { Passway }
 	}
 })
 

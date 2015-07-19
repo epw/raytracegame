@@ -1,6 +1,6 @@
 #! /bin/bash
 
-POVRAY=povray
+POVRAY="povray -D"
 
 base=$1
 shift

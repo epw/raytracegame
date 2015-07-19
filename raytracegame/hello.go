@@ -149,7 +149,7 @@ func click_event(w http.ResponseWriter, r *http.Request) {
 	
 	new_room := newRoom(place, x, y)
 	if new_room != "" {
-		fmt.Fprintf(w, "{\"new_room\": \"places/%s/rendered.png\"}", new_room);
+		fmt.Fprintf(w, "{\"new_room\": \"%s\"}", new_room);
 	} else {
 		fmt.Fprintf(w, "{\"new_room\": false}")
 	}

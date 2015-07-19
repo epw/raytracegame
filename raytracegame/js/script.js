@@ -53,6 +53,7 @@ function init() {
     document.addEventListener("pointerlockchange", pointerlockchange, false);
     document.addEventListener("touchstart", touchstart, false);
     document.addEventListener("touchmove", touchmove, false);
+    document.addEventListener("touchend", touchend, false);
 
     img = $("#photosphere")[0];
     placename = $("#placename").val();
@@ -61,11 +62,14 @@ function init() {
 function click_result(json) {
     data = JSON.parse(json);
     if (data.new_room) {
-	photosphere.material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture(data.new_room)});
+	placename = data.new_room;
+	photosphere.material = new THREE.MeshPhongMaterial({map: THREE.ImageUtils.loadTexture("places/" + data.new_room + "/rendered.png")});
     }
 }
 
-function click_event(x, y) {
+function click_event() {
+    var x = (theta / (Math.PI * 2)) * img.width;
+    var y = img.height - ((phi + Math.PI / 2) / Math.PI) * img.height;
     $.post("/click_event", {"x": Math.floor(x), "y": Math.floor(y),
 			    "place": placename},
 	   click_result);
@@ -75,9 +79,7 @@ function mouseclick(e) {
     switch (e.button) {
     case 0:
 	if (document.pointerLockElement == canvas) {
-	    var x = (theta / (Math.PI * 2)) * img.width;
-	    var y = img.height - ((phi + Math.PI / 2) / Math.PI) * img.height;
-	    click_event(x, y);
+	    click_event();
 	}
 	break;
     case 1:
@@ -126,15 +128,18 @@ function mousemove(e) {
 
 var last_touch_x = -1;
 var last_touch_y = -1;
+var just_tap = false;
 
 function touchstart(e) {
     e.preventDefault();
     last_touch_x = e.changedTouches[0].pageX;
     last_touch_y = e.changedTouches[0].pageY;
+    just_tap = true;
 }
 
 function touchmove(e) {
     e.preventDefault();
+    just_tap = false;
     if (last_touch_x != -1) {
 	theta -= (e.changedTouches[0].pageX - last_touch_x) / (WIDTH + 0.0);
 	phi += (e.changedTouches[0].pageY - last_touch_y) / (HEIGHT + 0.0);
@@ -142,6 +147,13 @@ function touchmove(e) {
     last_touch_x = e.changedTouches[0].pageX;
     last_touch_y = e.changedTouches[0].pageY;
 }    
+
+function touchend(e) {
+    e.preventDefault();
+    if (just_tap) {
+	click_event();
+    }
+}
 
 function animate() {
     requestAnimationFrame(animate);
