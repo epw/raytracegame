@@ -1,10 +1,23 @@
 First_Room
- box 
+ switch First_Room_Opened
+ door 
  corridor Corridor
+ second_room 
+First_Room_Opened
+ switch First_Room
+ corridor Corridor_Opened
+ second_room 
 Corridor
- box 
+ switch 
+ door 
  corridor First_Room
+ second_room 
+Corridor_Opened
+ switch 
+ corridor First_Room_Opened
  second_room Second_Room
 Second_Room
- second_room Corridor
- 
+ switch 
+ door 
+ corridor 
+ second_room Corridor_Opened

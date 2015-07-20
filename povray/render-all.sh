@@ -10,6 +10,7 @@ rm -rf $root/places $root/masks
 mkdir $root/places $root/masks
 
 render.sh First_Room
+render.sh First_Room First_Room_Opened Door_Open=1
 render.sh Corridor
+render.sh Corridor Corridor_Opened Door_Open=1
 render.sh Second_Room
-

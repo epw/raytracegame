@@ -33,7 +33,7 @@ fog {
 difference {
 	box { <-100, -100, -100>, <100, 100, 100> }
 	box { <-ROOM_SIZE/2, -ROOM_SIZE/2, 0>, <ROOM_SIZE/2, ROOM_SIZE/2, 4.5> }
-	box { <-1.3, ROOM_SIZE/2, 0>, <1.3, ROOM_SIZE/2 + CORRIDOR_LENGTH, 3.5> }
+	box { <-1.3, ROOM_SIZE/2, 0>, <1.3, ROOM_SIZE/2 + CORRIDOR_LENGTH, 3.5>}
 	box { <-ROOM_SIZE/2, ROOM_SIZE/2 + CORRIDOR_LENGTH - 0.01, 0>,
               <ROOM_SIZE/2, 3*ROOM_SIZE/2 + CORRIDOR_LENGTH, 4.5> }
 
@@ -45,6 +45,52 @@ difference {
 	}
 }
 
+/*
+#macro Switch(Angle)
+union {
+	box { <-.1, -ROOM_SIZE/2 + .1, 1.5>, <.1, -ROOM_SIZE/2, 1.8>
+		texture { T_Wood4 }
+	}
+	cylinder { <0, -ROOM_SIZE/2 + 1, 1.65>, <0, -ROOM_SIZE/2 - 1, 1.65>, .5
+		texture { pigment { color rgb<.6, .6, .6> } }
+		rotate x*Angle
+	}
+}
+#end
+*/
+
+#declare Switch =
+union {
+	sphere { <0, -ROOM_SIZE/2, 1.65>, .25
+	}
+	cylinder { <0, -ROOM_SIZE/2 - 1, 1.65>, <0, -ROOM_SIZE/2 + 1, 1.65>, .1
+	}
+		texture { T_Wood4 }
+};
+
+#ifdef (Door_Open)
+Active_Object("switch", object { Switch
+	rotate x*30
+})
+#else
+Active_Object("switch", object { Switch })
+#end
+
+#declare Door = box { <-1.3, ROOM_SIZE/2 + CORRIDOR_LENGTH - .2, 0>,
+	<1.3, ROOM_SIZE/2 + CORRIDOR_LENGTH - .1, 3.5>
+	texture { T_Wood1 }
+};
+
+#ifdef (Door_Open)
+object { Door
+	translate x*1.2
+	rotate z*90
+}
+#else
+Active_Object("door",
+object { Door })
+#end
+
 #declare Sconce_Color = color rgb<.8, .8, .5>;
 
 #declare Sconce_Object = sphere { <0, 0, 0>, .1
@@ -53,7 +99,6 @@ difference {
 	}
 	finish { ambient 2 }
 };
-
 
 #declare Sconce =
 #ifndef (Active)
@@ -84,11 +129,6 @@ object { Sconce
 object { Sconce
 	translate <ROOM_SIZE/2 - 0.01, ROOM_SIZE + CORRIDOR_LENGTH, 2.25>
 }
-
-Active_Object ("box",
-box { <-.5, -4, 0> <.5, -5, 1>
-	texture { T_Wood4 }
-})
 
 #ifdef(Active)
 #declare Passway = color rgbt<0, 0, 0, 0>;
